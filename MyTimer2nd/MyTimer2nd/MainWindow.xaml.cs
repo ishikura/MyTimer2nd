@@ -19,9 +19,41 @@ namespace WpfApplication1
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        public static string labelRemainTime = "YAHHO";
+
+        enum TimerState
+        {
+            Init, Counting, Pause, Countup,
+        }
+
+        EasyTimer easyTimer;
+        TimerState timerStatus = TimerState.Init;
+
+        MainViewModel mainViewModel = new MainViewModel(); 
+
         public MainWindow()
         {
             InitializeComponent();
+
+            this.DataContext = mainViewModel;
+
+            easyTimer = new EasyTimer();
         }
+
+        private void button1_Click(object sender, RoutedEventArgs e)
+        {      
+            easyTimer.SetTimerValue(new TimeSpan(0,0,8));
+            //easyTimer.setCallback((t) => { MessageBox.Show(t.ToString()); }); 
+            easyTimer.setCallback((t) => { mainViewModel.RemainTime = t;}); 
+            easyTimer.Start();
+            MessageBox.Show("START");
+        }
+
+        private void reset_Click(object sender, RoutedEventArgs e)
+        {
+            easyTimer.Reset();
+        }
+
     }
 }
