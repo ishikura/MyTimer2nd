@@ -12,6 +12,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using WpfApplication1.Properties;
+
 namespace WpfApplication1
 {
     /// <summary>
@@ -19,14 +21,6 @@ namespace WpfApplication1
     /// </summary>
     public partial class MainWindow : Window
     {
-
-        public static string labelRemainTime = "YAHHO";
-
-        enum TimerState
-        {
-            Init, Counting, Pause, Countup,
-        }
-
         EasyTimer easyTimer;
         TimerState timerStatus = TimerState.Init;
 
@@ -44,7 +38,6 @@ namespace WpfApplication1
         private void button1_Click(object sender, RoutedEventArgs e)
         {      
             easyTimer.SetTimerValue(new TimeSpan(0,0,8));
-            //easyTimer.setCallback((t) => { MessageBox.Show(t.ToString()); }); 
             easyTimer.setCallback((t) => { mainViewModel.RemainTime = t;}); 
             easyTimer.Start();
             MessageBox.Show("START");
@@ -52,7 +45,26 @@ namespace WpfApplication1
 
         private void reset_Click(object sender, RoutedEventArgs e)
         {
+            timerStatus = TimerState.Init;
             easyTimer.Reset();
+            mainViewModel.TimerStatus = timerStatus;
+        }
+
+        private void StartPauseBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (timerStatus != TimerState.CountDown)
+            {
+                timerStatus = TimerState.CountDown;
+                easyTimer.SetTimerValue(new TimeSpan(0, 0, 8));
+                easyTimer.setCallback((t) => { mainViewModel.RemainTime = t; });
+                easyTimer.Start();
+            }
+            else
+            {
+                timerStatus = TimerState.Pause;
+                easyTimer.Pause();
+            }
+            mainViewModel.TimerStatus = timerStatus;
         }
 
     }

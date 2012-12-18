@@ -4,7 +4,7 @@
         Title="MainWindow" Height="276" Width="514">
     <Grid Height="242" Width="491">
         <Button Content="Button" Height="23" HorizontalAlignment="Left" Margin="383,193,0,0" Name="button1" VerticalAlignment="Top" Width="75" Click="button1_Click" />
-        <Button Content="START" Height="23" HorizontalAlignment="Left" Margin="290,163,0,0" Name="StartPauseBtn" VerticalAlignment="Top" Width="75" />
+        <Button Content="{Binding StartOrPauseBtnStr}" Height="23" HorizontalAlignment="Left" Margin="290,163,0,0" Name="StartPauseBtn" VerticalAlignment="Top" Width="75" Click="StartPauseBtn_Click" IsEnabled="False" />
         <Button Content="RESET" Height="23" HorizontalAlignment="Left" Margin="383,163,0,0" Name="reset" VerticalAlignment="Top" Width="75" Click="reset_Click" />
         <Label Content="{Binding RemainTimeStr,Mode=OneWay}" Height="106" HorizontalAlignment="Left" Margin="12,12,0,0" Name="label1" VerticalAlignment="Top" Width="467" FontSize="72" />
     </Grid>

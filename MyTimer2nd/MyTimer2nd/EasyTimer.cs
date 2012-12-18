@@ -16,6 +16,8 @@ namespace WpfApplication1
         private static TimeSpan timerRemainingValue = initialTimerValue;
         private static DateTime endTime;
 
+        private static bool isPause = false;
+
         private static Task countdownTask;
 
         //呼び出し元に残り時間を返す
@@ -61,27 +63,37 @@ namespace WpfApplication1
             }
         }
         /// <summary>
-        /// カウントダウンSTART(RESTART兼用)
+        /// カウントダウンSTARTorRESTART
         /// </summary>
         public void Start()
         {
-            if(CountdownCallback == null)
+            if (isPause)
             {
-                // TODO: コールバック未設定の場合の挙動
-                return;
+                isPause = false;
             }
-            //終了時刻を確定(RESTART時はPAUSE時の残り時間を使用)
-            endTime = DateTime.Now + timerRemainingValue;
-            if (countdownTask == null)
+            else
             {
-                countdownTask = new Task(countdownTaskImp);
-                countdownTask.Start();
-            }
-            else if (countdownTask.IsCompleted)
-            {
-                countdownTask.Dispose();
-                countdownTask = new Task(countdownTaskImp);
-                countdownTask.Start();
+                if (CountdownCallback == null)
+                {
+                    // TODO: コールバック未設定の場合の挙動
+                    return;
+                }
+                //終了時刻を確定(RESTART時はPAUSE時の残り時間を使用)
+                endTime = DateTime.Now + timerRemainingValue;
+                
+                isPause = false;
+
+                if (countdownTask == null)
+                {
+                    countdownTask = new Task(countdownTaskImp);
+                    countdownTask.Start();
+                }
+                else if (countdownTask.IsCompleted)
+                {
+                    countdownTask.Dispose();
+                    countdownTask = new Task(countdownTaskImp);
+                    countdownTask.Start();
+                }
             }
         }
         /// <summary>
@@ -89,9 +101,14 @@ namespace WpfApplication1
         /// </summary>
         public void Pause()
         {
-            //現在の残り時間を保持してタスクを破棄
+            isPause = true;
+
+            //現在の残り時間を保持
             timerRemainingValue = endTime - DateTime.Now;
-            countdownTask.Dispose();
+            
+            //countdownTask.;
+            //tokenを使用したキャンセル処理は例外を使用する必要があるので、別の宿題とする。
+            //フラグだらけとどっちがいいのか…？
         }
 
         /// <summary>
@@ -107,20 +124,24 @@ namespace WpfApplication1
         {
             while (true)
             {
-                if ((endTime - DateTime.Now) > TimeSpan.Zero)
-                {
-                    //残り時間を返す
-                    CountdownCallback(endTime - DateTime.Now);
+                if (isPause)
+                {    
+                    break;
                 }
                 else
                 {
-                    //TIMEUP!（…のはず）
-                    CountdownCallback(TimeSpan.Zero);
-                    //MessageBox.Show("TimeUp!");
-                    //TaskScheduler.FromCurrentSynchronizationContext();
-                    break;
+                    if ((endTime - DateTime.Now) > TimeSpan.Zero)
+                    {
+                        //残り時間を返す
+                        CountdownCallback(endTime - DateTime.Now);
+                    }
+                    else
+                    {
+                        //TIMEUP!（…のはず）
+                        CountdownCallback(TimeSpan.Zero);
+                        break;
+                    }
                 }
-
                 Thread.Sleep(_intervalMsec);
             }
         }
