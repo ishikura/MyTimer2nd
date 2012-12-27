@@ -21,9 +21,6 @@ namespace WpfApplication1
     /// </summary>
     public partial class MainWindow : Window
     {
-        EasyTimer easyTimer;
-        TimerState timerStatus = TimerState.Init;
-
         MainViewModel mainViewModel = new MainViewModel(); 
 
         public MainWindow()
@@ -31,41 +28,14 @@ namespace WpfApplication1
             InitializeComponent();
 
             this.DataContext = mainViewModel;
-
-            easyTimer = new EasyTimer();
         }
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {      
-            easyTimer.SetTimerValue(new TimeSpan(0,0,8));
-            easyTimer.setCallback((t) => { mainViewModel.RemainTime = t;}); 
-            easyTimer.Start();
-            MessageBox.Show("START");
+            //easyTimer.SetTimerValue(new TimeSpan(0,0,8));
+            //easyTimer.setCallback((t) => { mainViewModel.RemainTime = t;}); 
+            //easyTimer.Start();
+            //MessageBox.Show("START");
         }
-
-        private void reset_Click(object sender, RoutedEventArgs e)
-        {
-            timerStatus = TimerState.Init;
-            easyTimer.Reset();
-            mainViewModel.TimerStatus = timerStatus;
-        }
-
-        private void StartPauseBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if (timerStatus != TimerState.CountDown)
-            {
-                timerStatus = TimerState.CountDown;
-                easyTimer.SetTimerValue(new TimeSpan(0, 0, 8));
-                easyTimer.setCallback((t) => { mainViewModel.RemainTime = t; });
-                easyTimer.Start();
-            }
-            else
-            {
-                timerStatus = TimerState.Pause;
-                easyTimer.Pause();
-            }
-            mainViewModel.TimerStatus = timerStatus;
-        }
-
     }
 }

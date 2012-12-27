@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using System.Windows.Input;  
 
 namespace WpfApplication1
 {
@@ -14,7 +15,19 @@ namespace WpfApplication1
         private TimerState _timerState = TimerState.Init;
         private string _startOrPauseBtnStr = "START";
 
-        //タイマー状態
+        EasyTimer easyTimer;
+
+        public MainViewModel()
+        {
+            easyTimer = new EasyTimer();
+        }
+
+        /// <summary>
+        /// タイマーの状態を保持
+        /// （同時にボタンの表示およびEnable/Disableも切り替えているが
+        /// 　こういうのはDataConverter等を使用するのが良いのだろうか？
+        /// 　ICommandのCanExec判定とか？）
+        /// </summary>
         public TimerState TimerStatus
         {
             get { return _timerState; }
@@ -25,14 +38,28 @@ namespace WpfApplication1
                 {
                     _startOrPauseBtnStr = "PAUSE";
                 }
-                else
+                else if (value == TimerState.Init || value == TimerState.Pause)
                 {
                     _startOrPauseBtnStr = "START";
                 }
+                else if (value == TimerState.TimeUp)
+                {
+                    _startOrPauseBtnStr = "TIMEUP";
+                }
+
                 RaisePropertyChanged("StartOrPauseBtnStr");
+                RaisePropertyChanged("isEnableStartPauseBtn");
             }
         }
-        
+
+        //ボタン操作可/不可
+        public Boolean isEnableStartPauseBtn
+        {
+            //get { return _timerState != TimerState.Init; }
+            get { return _timerState != TimerState.TimeUp; }
+
+        }
+
         //STARTorPAUSEボタン表記
         public string StartOrPauseBtnStr
         {
@@ -57,8 +84,80 @@ namespace WpfApplication1
                 }
             }
         }
-        public event PropertyChangedEventHandler PropertyChanged;
+        /// <summary>
+        /// コマンド群
+        /// </summary>
+        private void StartOrPauseCommandHandler(object param)
+        {
+            if (_timerState == TimerState.Init || _timerState == TimerState.TimeUp)
+            {
+                TimerStatus = TimerState.CountDown;
+                easyTimer.SetTimerValue(new TimeSpan(0, 0, 5));
+                easyTimer.setCallback((t) =>
+                {
+                    RemainTime = t;
+                    if (t == TimeSpan.Zero)
+                    {
+                        TimerStatus = TimerState.TimeUp;
+                    }
+                });
+                easyTimer.Start();
+            }
+            else if(_timerState == TimerState.CountDown)
+            {
+                TimerStatus = TimerState.Pause;
+                easyTimer.Pause();
+            }
+            else if (_timerState == TimerState.Pause)
+            {
+                //残時間再設定
+                TimerStatus = TimerState.CountDown;
+                easyTimer.SetTimerValue(RemainTime);
+                easyTimer.Start();
+            }
+            RaisePropertyChanged("StartOrPauseBtnStr");
+        }
 
+        private ICommand _startOrPauseCommand;
+        public ICommand StartOrPauseCommand
+        {
+            get
+            {
+                // 作成済みなら、それを返す  
+                if (_startOrPauseCommand != null) return _startOrPauseCommand;
+
+                _startOrPauseCommand = new DelegateCommand(
+                    this.StartOrPauseCommandHandler,
+                    (x)=>(_timerState != TimerState.TimeUp));
+                return _startOrPauseCommand;
+            }  
+        }
+
+        private void ResetCommandHandler(object param)
+        {
+            TimerStatus = TimerState.Init;
+            easyTimer.Reset();
+        }
+
+        private ICommand _resetCommand;
+        public ICommand ResetCommand
+        {
+            get
+            {
+                // 作成済みなら、それを返す  
+                if (_resetCommand != null) return _resetCommand;
+
+                _resetCommand = new DelegateCommand(
+                    this.ResetCommandHandler,
+                    (x)=>(_timerState != TimerState.Init));
+                return _resetCommand;
+            }
+        }
+
+        /// <summary>
+        /// 変更通知
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
         protected void RaisePropertyChanged(string propertyName)
         {
             var d = PropertyChanged;

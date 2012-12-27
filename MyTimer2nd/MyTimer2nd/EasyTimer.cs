@@ -69,6 +69,7 @@ namespace WpfApplication1
         {
             if (isPause)
             {
+                endTime = DateTime.Now + timerRemainingValue;
                 isPause = false;
             }
             else
@@ -124,11 +125,7 @@ namespace WpfApplication1
         {
             while (true)
             {
-                if (isPause)
-                {    
-                    break;
-                }
-                else
+                if (!isPause)
                 {
                     if ((endTime - DateTime.Now) > TimeSpan.Zero)
                     {
