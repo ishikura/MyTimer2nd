@@ -5,6 +5,8 @@ using System.Data;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Data;
+using System.Globalization;
 
 namespace WpfApplication1
 {
@@ -43,6 +45,24 @@ namespace WpfApplication1
         }
 
         #endregion
+    }
+    public class TimeSpanToStringConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            List<TimeSpan> timeSpanList = (List<TimeSpan>)value;
+            List<string> timeSpanListStr = new List<string>();
+            foreach(var ts in timeSpanList)
+            {
+                timeSpanListStr.Add(ts.ToString("hh\\:mm\\:ss"));
+            }
+            return timeSpanListStr;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value;
+        }
     }
   
     public enum TimerState

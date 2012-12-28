@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text;
-using System.Windows.Input;  
+using System.Windows.Input;
+
 
 namespace WpfApplication1
 {
@@ -14,12 +16,16 @@ namespace WpfApplication1
         private TimeSpan _remainTime;
         private TimerState _timerState = TimerState.Init;
         private string _startOrPauseBtnStr = "START";
+        private List<TimeSpan> _timerValueList = new List<TimeSpan>(){new TimeSpan(0, 0, 10)};
+        private int _selectedTimeSpanListId = 0;
 
         EasyTimer easyTimer;
 
         public MainViewModel()
         {
             easyTimer = new EasyTimer();
+
+            _timerValueList.Add(new TimeSpan(0, 0, 30));
         }
 
         /// <summary>
@@ -49,6 +55,24 @@ namespace WpfApplication1
 
                 RaisePropertyChanged("StartOrPauseBtnStr");
                 RaisePropertyChanged("isEnableStartPauseBtn");
+            }
+        }
+        public List<TimeSpan> TimerValueList
+        {
+            get { return _timerValueList; }
+            set
+            {
+                _timerValueList = value;
+                RaisePropertyChanged("TimerValueList");
+            }
+        }
+        public int SelectedTimeSpanListId
+        {
+            get { return _selectedTimeSpanListId; }
+            set
+            {
+                _selectedTimeSpanListId = value;
+                RemainTime = _timerValueList[value];
             }
         }
 
@@ -84,6 +108,7 @@ namespace WpfApplication1
                 }
             }
         }
+
         /// <summary>
         /// コマンド群
         /// </summary>
@@ -92,7 +117,7 @@ namespace WpfApplication1
             if (_timerState == TimerState.Init || _timerState == TimerState.TimeUp)
             {
                 TimerStatus = TimerState.CountDown;
-                easyTimer.SetTimerValue(new TimeSpan(0, 0, 5));
+                easyTimer.SetTimerValue(RemainTime);
                 easyTimer.setCallback((t) =>
                 {
                     RemainTime = t;
@@ -135,7 +160,11 @@ namespace WpfApplication1
 
         private void ResetCommandHandler(object param)
         {
-            TimerStatus = TimerState.Init;
+            if (TimerStatus != TimerState.CountDown)
+            {
+                TimerStatus = TimerState.Init;
+            }
+            RemainTime = _timerValueList[_selectedTimeSpanListId];
             easyTimer.Reset();
         }
 
