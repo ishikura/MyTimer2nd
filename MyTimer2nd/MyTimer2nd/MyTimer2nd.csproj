@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="TimerFileIO.cs" />
     <Compile Include="MainViewModel.cs" />
     <Compile Include="EasyTimer.cs" />
     <Compile Include="EditWindow.xaml.cs">

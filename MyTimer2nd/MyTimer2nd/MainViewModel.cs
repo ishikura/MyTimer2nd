@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text;
 using System.Windows.Input;
-
+using System.Linq;
 
 namespace WpfApplication1
 {
@@ -16,7 +16,8 @@ namespace WpfApplication1
         private TimeSpan _remainTime;
         private TimerState _timerState = TimerState.Init;
         private string _startOrPauseBtnStr = "START";
-        private List<TimeSpan> _timerValueList = new List<TimeSpan>(){new TimeSpan(0, 0, 10)};
+
+        private List<TimeSpan> _timerValueList;
         private int _selectedTimeSpanListId = 0;
 
         EasyTimer easyTimer;
@@ -25,14 +26,21 @@ namespace WpfApplication1
         {
             easyTimer = new EasyTimer();
 
-            _timerValueList.Add(new TimeSpan(0, 0, 30));
+            try
+            {
+                _timerValueList = TimerFileIo.ReadTimerValue().ToList();
+            }
+            catch (Exception e)
+            {
+                // File絡みのエラー（Fileなし、Parse出来ない等）の場合は3分タイマー1個にしておく
+                _timerValueList = new List<TimeSpan> { new TimeSpan(0, 3, 0) };
+            }
+
+            SelectedTimeSpanListId = 0;
         }
 
         /// <summary>
         /// タイマーの状態を保持
-        /// （同時にボタンの表示およびEnable/Disableも切り替えているが
-        /// 　こういうのはDataConverter等を使用するのが良いのだろうか？
-        /// 　ICommandのCanExec判定とか？）
         /// </summary>
         public TimerState TimerStatus
         {
@@ -57,6 +65,7 @@ namespace WpfApplication1
                 RaisePropertyChanged("isEnableStartPauseBtn");
             }
         }
+
         public List<TimeSpan> TimerValueList
         {
             get { return _timerValueList; }
@@ -157,7 +166,10 @@ namespace WpfApplication1
                 return _startOrPauseCommand;
             }  
         }
-
+        /// <summary>
+        /// RESETボタンハンドラ
+        /// </summary>
+        /// <param name="param"></param>
         private void ResetCommandHandler(object param)
         {
             if (TimerStatus != TimerState.CountDown)

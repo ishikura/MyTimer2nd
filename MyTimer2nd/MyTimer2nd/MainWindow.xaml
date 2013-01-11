@@ -2,17 +2,26 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:c="clr-namespace:WpfApplication1"
-        Title="MainWindow" Height="221" Width="509">
-    <Grid Height="184" Width="490">
+        Title="MainWindow" Height="256" Width="495">
+    <Grid Height="216" Width="474">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25" MaxHeight="48" />
+            <RowDefinition Height="191*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0*" />
+            <ColumnDefinition Width="474*" />
+        </Grid.ColumnDefinitions>
         <Grid.Resources>
             <c:TimeSpanToStringConverter x:Key="TimeSpanToStr"/>
         </Grid.Resources>
-        <Button Content="{Binding StartOrPauseBtnStr}" Height="23" HorizontalAlignment="Left" Margin="323,153,0,0" Name="StartPauseBtn" VerticalAlignment="Top" Width="75" Command="{Binding StartOrPauseCommand}" IsEnabled="{Binding isEnableStartPauseBtn}" />
-        <Button Content="RESET" Height="23" HorizontalAlignment="Left" Margin="404,153,0,0" Name="reset" Command="{Binding ResetCommand}"  VerticalAlignment="Top" Width="75"  />
-        <Label Content="{Binding RemainTimeStr,Mode=OneWay}" Height="106" HorizontalAlignment="Left" Margin="12,12,0,0" Name="label1" VerticalAlignment="Top" Width="467" FontSize="72" />
-        <ComboBox Height="23" HorizontalAlignment="Left" Margin="323,124,0,0" Name="comboBox1" VerticalAlignment="Top" Width="156"
+        <Button Content="{Binding StartOrPauseBtnStr}" Height="23" HorizontalAlignment="Left" Margin="305,133,0,0" Name="StartPauseBtn" VerticalAlignment="Top" Width="75" Command="{Binding StartOrPauseCommand}" IsEnabled="{Binding isEnableStartPauseBtn}" Grid.Column="1" Grid.Row="1"/>
+        <Button Content="RESET" Height="23" HorizontalAlignment="Left" Margin="386,133,0,0" Name="reset" Command="{Binding ResetCommand}"  VerticalAlignment="Top" Width="75" Grid.Column="1" Grid.Row="1"/>
+        <Label Content="{Binding RemainTimeStr,Mode=OneWay}" Height="98" HorizontalAlignment="Center" Name="label1" VerticalAlignment="Top" Width="467" FontSize="72" Grid.Row="1" Grid.Column="1" HorizontalContentAlignment="Right" />
+        <ComboBox Height="23" HorizontalAlignment="Left" Margin="305,104,0,0" Name="comboBox1" VerticalAlignment="Top" Width="156"
                   ItemsSource="{Binding Path=TimerValueList,
                   Converter={StaticResource TimeSpanToStr}}"
-                  SelectedIndex="{Binding SelectedTimeSpanListId}"/>
+                  SelectedIndex="{Binding SelectedTimeSpanListId}" Grid.Column="1" Grid.Row="1"/>
+        <Menu Height="28" HorizontalAlignment="Left" Margin="0,-2,0,0" Name="menu1" VerticalAlignment="Top" Width="139" Grid.RowSpan="2" Grid.Column="1" />
     </Grid>
 </Window>
