@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text;
+using System.Windows;
 using System.Windows.Input;
 using System.Linq;
 
@@ -32,6 +33,7 @@ namespace WpfApplication1
             }
             catch (Exception e)
             {
+                MessageBox.Show(e.ToString());
                 // File絡みのエラー（Fileなし、Parse出来ない等）の場合は3分タイマー1個にしておく
                 _timerValueList = new List<TimeSpan> { new TimeSpan(0, 3, 0) };
             }
@@ -179,7 +181,6 @@ namespace WpfApplication1
             RemainTime = _timerValueList[_selectedTimeSpanListId];
             easyTimer.Reset();
         }
-
         private ICommand _resetCommand;
         public ICommand ResetCommand
         {
@@ -192,6 +193,43 @@ namespace WpfApplication1
                     this.ResetCommandHandler,
                     (x)=>(_timerState != TimerState.Init));
                 return _resetCommand;
+            }
+        }
+        /// <summary>
+        /// 編集用ウインドウ起動コマンド
+        /// </summary>
+        /// <param name="param"></param>
+        private void EditWindowOpenCommandHandler(object param)
+        {
+        }
+        private ICommand _editWindowOpenCommand;
+        public ICommand EditWindowOpenCommand
+        {
+            get
+            {
+                if( _editWindowOpenCommand != null ) return _editWindowOpenCommand;
+
+                _editWindowOpenCommand = new DelegateCommand(
+                    this.EditWindowOpenCommandHandler,
+                    (x) => (_timerState != TimerState.CountDown));
+                return _editWindowOpenCommand;
+            }
+        }
+        private void ExitApplicationHandler(object param)
+        {
+            Environment.Exit(0);
+        }
+        private ICommand _exitApplicationCommand;
+        public ICommand ExitApplicationCommand
+        {
+            get
+            {
+                if(_exitApplicationCommand != null) return _exitApplicationCommand;
+
+                _exitApplicationCommand = new DelegateCommand(
+                    this.ExitApplicationHandler);
+                    // 常時実行可
+                return _exitApplicationCommand;
             }
         }
 

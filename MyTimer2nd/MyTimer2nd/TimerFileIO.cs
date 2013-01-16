@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace WpfApplication1
@@ -22,6 +23,7 @@ namespace WpfApplication1
                 }
                 catch(Exception e)
                 {
+                    MessageBox.Show(e.ToString());
                     // Formatエラーくらいしか想定してないが…。
                     return new List<TimeSpan>() { new TimeSpan(0, 3, 0) };
                 }

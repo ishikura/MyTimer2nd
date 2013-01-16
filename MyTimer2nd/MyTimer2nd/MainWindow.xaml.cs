@@ -29,13 +29,5 @@ namespace WpfApplication1
 
             this.DataContext = mainViewModel;
         }
-
-        private void button1_Click(object sender, RoutedEventArgs e)
-        {      
-            //easyTimer.SetTimerValue(new TimeSpan(0,0,8));
-            //easyTimer.setCallback((t) => { mainViewModel.RemainTime = t;}); 
-            //easyTimer.Start();
-            //MessageBox.Show("START");
-        }
     }
 }

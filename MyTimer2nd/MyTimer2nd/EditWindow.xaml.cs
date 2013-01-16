@@ -16,11 +16,11 @@ namespace WpfApplication1
     /// <summary>
     /// Window1.xaml の相互作用ロジック
     /// </summary>
-    public partial class Window1 : Window
+    public partial class EditWindow : Window
     {
-        public Window1()
+        public EditWindow()
         {
-            InitializeComponent();
+            //InitializeComponent();
         }
     }
 }

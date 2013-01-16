@@ -19,6 +19,10 @@ namespace WpfApplication1
         private Action<object> _executeAction;
         private Func<object, bool> _canExecuteAction;
 
+        public DelegateCommand(Action<object> executeAction)
+            : this(executeAction, o => true)
+        { }
+
         public DelegateCommand(Action<object> executeAction, Func<object, bool> canExecuteAction)
         {
             _executeAction = executeAction;
