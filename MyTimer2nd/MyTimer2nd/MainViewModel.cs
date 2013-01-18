@@ -23,10 +23,13 @@ namespace WpfApplication1
 
         EasyTimer easyTimer;
 
+        EditWindow editWindow;
+
         public MainViewModel()
         {
             easyTimer = new EasyTimer();
 
+            
             try
             {
                 _timerValueList = TimerFileIo.ReadTimerValue().ToList();
@@ -201,6 +204,11 @@ namespace WpfApplication1
         /// <param name="param"></param>
         private void EditWindowOpenCommandHandler(object param)
         {
+            if (editWindow == null) 
+            {
+                editWindow = new EditWindow();
+            }
+            editWindow.ShowDialog();
         }
         private ICommand _editWindowOpenCommand;
         public ICommand EditWindowOpenCommand

@@ -23,8 +23,8 @@
                   Converter={StaticResource TimeSpanToStr}}"
                   SelectedIndex="{Binding SelectedTimeSpanListId}" Grid.Column="1" Grid.Row="1"/>
         <Menu Height="23" HorizontalAlignment="Left" Margin="0,-2,0,0" Name="menu1" VerticalAlignment="Top" Width="81" Grid.Column="1">
-            <MenuItem Header="ファイル" Command="{Binding EditWindowOpenCommand}">
-                <MenuItem Header="編集" />
+            <MenuItem Header="ファイル" >
+                <MenuItem Header="編集" Command="{Binding EditWindowOpenCommand}"/>
                 <MenuItem Header="終了" Command="{Binding ExitApplicationCommand}" />
             </MenuItem>
         </Menu>

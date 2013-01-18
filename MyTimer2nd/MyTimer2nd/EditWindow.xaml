@@ -1,8 +1,18 @@
-﻿<Window x:Class="WpfApplication1.Window1"
+﻿<Window x:Class="WpfApplication1.EditWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="EditWindow" Height="300" Width="300">
-    <Grid>
-        
+        Title="EditWindow" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" d:DesignHeight="300" d:DesignWidth="404" SizeToContent="WidthAndHeight">
+    <Grid Height="Auto" Name="grid1" Width="Auto" Margin="0" ShowGridLines="True" VerticalAlignment="Top">
+        <ComboBox Height="21" HorizontalAlignment="Left" Name="comboBox1" VerticalAlignment="Top" Width="119" />
+        <Label Content="0" Height="47" HorizontalAlignment="Left" Margin="12,52,0,0" Name="HHLabel" VerticalAlignment="Top" Width="31" FontSize="36" />
+        <Label Content="0" FontSize="36" Height="47" HorizontalAlignment="Left" Margin="49,52,0,0" Name="HLabel" VerticalAlignment="Top" Width="31" />
+        <Label Content="0" FontSize="36" Height="47" HorizontalAlignment="Left" Margin="96,52,0,0" Name="MMLabel" VerticalAlignment="Top" Width="31" />
+        <Label Content="0" FontSize="36" Height="47" HorizontalAlignment="Left" Margin="133,52,0,0" Name="MLabel" VerticalAlignment="Top" Width="31" />
+        <Label Content="0" FontSize="36" Height="47" HorizontalAlignment="Left" Margin="181,52,0,0" Name="SSLabel" VerticalAlignment="Top" Width="31" />
+        <Label Content="0" FontSize="36" Height="47" HorizontalAlignment="Left" Margin="218,52,0,0" Name="SLabel" VerticalAlignment="Top" Width="31" />
+        <Label Content=":" FontSize="36" Height="47" HorizontalAlignment="Left" Margin="78,52,0,0" Name="label7" VerticalAlignment="Top" Width="31" />
+        <Label Content=":" FontSize="36" Height="47" HorizontalAlignment="Left" Margin="161,52,0,0" Name="label8" VerticalAlignment="Top" Width="31" />
+        <Button Content="設定" Height="23" HorizontalAlignment="Left" Margin="89,130,0,0" Name="TimerValueSetBtn" VerticalAlignment="Top" Width="75" />
+        <Button Content="戻る" Height="23" HorizontalAlignment="Left" Margin="174,130,0,0" Name="MainWindowCallBtn" VerticalAlignment="Top" Width="75" />
     </Grid>
 </Window>

@@ -20,7 +20,7 @@ namespace WpfApplication1
     {
         public EditWindow()
         {
-            //InitializeComponent();
+            InitializeComponent();
         }
     }
 }
